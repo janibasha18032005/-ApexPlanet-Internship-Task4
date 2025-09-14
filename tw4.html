@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Portfolio</title>
+  <style>
+   
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f0f4f8; color: #333; scroll-behavior: smooth; }
+    header { background: #222; padding: 15px; text-align: center; position: sticky; top: 0; z-index: 1000; }
+    nav a { color: white; margin: 0 15px; text-decoration: none; font-weight: bold; transition: 0.3s; }
+    nav a:hover { color: #ffcc00; }
+    section { padding: 60px 20px; }
+
+    
+    #about { background: #fdfdfd; }
+    #projects { background: #eef6ff; }
+    #contact { background: #fff5f5; }
+
+    
+    h1, h2 { text-align: center; margin-bottom: 20px; }
+
+    
+    .about { text-align: center; max-width: 700px; margin: auto; }
+
+    
+    .project-card { background: white; margin: 20px auto; padding: 20px; border-radius: 10px; max-width: 800px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+
+    
+    #todo { text-align: center; }
+    #todo input { padding: 10px; width: 200px; border: 1px solid #ccc; border-radius: 5px; }
+    #todo button { padding: 10px; margin-left: 5px; background: #222; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    #todo button:hover { background: #444; }
+    #todo ul { list-style: none; padding: 0; }
+    #todo li { margin: 5px 0; }
+
+    
+    .controls { text-align: center; margin-bottom: 20px; }
+    select { padding: 8px; margin: 0 5px; border-radius: 5px; border: 1px solid #ccc; }
+    .products { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+    .product { border: 1px solid #ddd; padding: 15px; border-radius: 8px; background: #f9f9f9; text-align: center; transition: 0.3s; }
+    .product:hover { background: #e6f0ff; }
+    .product img { width: 100%; max-height: 150px; object-fit: contain; border-radius: 5px; margin-bottom: 10px; }
+
+    
+    .contact form { max-width: 500px; margin: auto; display: flex; flex-direction: column; }
+    .contact input, .contact textarea { padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 5px; }
+    .contact button { padding: 12px; background: #222; color: white; border: none; cursor: pointer; border-radius: 5px; }
+    .contact button:hover { background: #444; }
+
+   
+    @media (max-width: 600px) {
+      nav a { display: block; margin: 10px 0; }
+    }
+  </style>
+</head>
+<body>
+  
+  <header>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <section id="about" class="about">
+    <h1>Hello, I'm SYED JANI BASHA👋</h1>
+    <p>Web Developer skilled in HTML, CSS, JavaScript, and React.  
+    This portfolio showcases my projects including a To-Do App and a Product Page.</p>
+    <br>
+    <a href="resume.pdf" download style="background:#222; color:white; padding:10px 20px; border-radius:5px; text-decoration:none;">📄 Download Resume</a>
+  </section>
+
+  
+  <section id="projects" class="projects">
+    <h1>My Projects</h1>
+
+    
+    <div class="project-card" id="todo">
+      <h2>📝 To-Do List App</h2>
+      <input type="text" id="taskInput" placeholder="Add a task">
+      <button onclick="addTask()">Add</button>
+      <ul id="taskList"></ul>
+    </div>
+
+    
+    <div class="project-card">
+      <h2>🛍️ Product Listing Page</h2>
+      <div class="controls">
+        <label>Category:</label>
+        <select id="categoryFilter" onchange="filterProducts()">
+          <option value="all">All</option>
+          <option value="electronics">Electronics</option>
+          <option value="clothing">Clothing</option>
+          <option value = "Groceries">Groceries</option>
+        </select>
+        <label>Sort By:</label>
+        <select id="sortBy" onchange="filterProducts()">
+          <option value="price-asc">Price: Low → High</option>
+          <option value="price-desc">Price: High → Low</option>
+          <option value="rating-desc">Rating: High → Low</option>
+        </select>
+      </div>
+      <div id="productList" class="products"></div>
+    </div>
+  </section>
+
+  
+  <section id="contact" class="contact">
+    <h1>Contact Me</h1>
+    <form>
+      <input type="text" placeholder="Your Name" required>
+      <input type="email" placeholder="Your Email" required>
+      <textarea placeholder="Message" rows="5" required></textarea>
+      <button type="submit">Send</button>
+    </form>
+  </section>
+
+  
+  <script>
+   
+    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+    function renderTasks() {
+      document.getElementById("taskList").innerHTML = "";
+      tasks.forEach((task, i) => {
+        document.getElementById("taskList").innerHTML += `
+          <li>
+            ${task} <button onclick="deleteTask(${i})">❌</button>
+          </li>`;
+      });
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
+
+    function addTask() {
+      const input = document.getElementById("taskInput");
+      if (input.value.trim()) {
+        tasks.push(input.value);
+        input.value = "";
+        renderTasks();
+      }
+    }
+
+    function deleteTask(index) {
+      tasks.splice(index, 1);
+      renderTasks();
+    }
+
+    renderTasks();
+
+    
+    const products = [
+      { name: "Phone", price: 500, rating: 4.5, category: "electronics", img: "https://in-exstatic-vivofs.vivo.com/gdHFRinHEMrj3yPG/1678430142060/32a07864edb4e2173850b4c2a4097c81.jpg" },
+      { name: "Laptop", price: 1000, rating: 4.8, category: "electronics", img: "https://tse3.mm.bing.net/th/id/OIP.y9AZrJ6OTze7CPilY0AeKAHaEK?rs=1&pid=ImgDetMain&o=7&rm=3" },
+      { name: "Shirt", price: 30, rating: 4.0, category: "clothing", img: "https://tse1.mm.bing.net/th/id/OIP.70V5KKa_BORQKbsCvwHQtwHaHa?w=500&h=500&rs=1&pid=ImgDetMain&o=7&rm=3" },
+      { name: "saree", price: 60, rating: 4.3, category: "clothing", img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhsLUNa56k2qdqqQe3Yw8ErSU83Hxd8-m0FaT8wjnmZZbcQlg_Yp3aO7LtkH-6oQqXT2-3v4kIfO5WpQpvDKHLPZazK2Ej5_cyZIh75WR9_Gm7783JExztdWwjMNB1EAYWG7T2dgAxWmZ1Lcz87wlfFOmoIBCu2quYhVtojAxa66-RyRv2slk647N8t/s1069/IMG_20220612_090516.jpg" },
+      { name: "Food", price: 100, rating: 4.2, category: "Groceries", img: "https://tse3.mm.bing.net/th/id/OIP.veeGu8jFIRh9cWpNHMphgwHaFZ?rs=1&pid=ImgDetMain&o=7&rm=3"}
+    ];
+
+    function filterProducts() {
+      let category = document.getElementById("categoryFilter").value;
+      let sort = document.getElementById("sortBy").value;
+
+      let filtered = products.filter(p => category === "all" || p.category === category);
+
+      if (sort === "price-asc") filtered.sort((a, b) => a.price - b.price);
+      if (sort === "price-desc") filtered.sort((a, b) => b.price - a.price);
+      if (sort === "rating-desc") filtered.sort((a, b) => b.rating - a.rating);
+
+      document.getElementById("productList").innerHTML = filtered.map(
+        p => `<div class="product">
+                <img src="${p.img}" alt="${p.name}">
+                <h3>${p.name}</h3>
+                <p>Price: $${p.price}</p>
+                <p>⭐ ${p.rating}</p>
+              </div>`
+      ).join("");
+    }
+
+    filterProducts();
+  </script>
+</body>
+</html>
